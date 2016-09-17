@@ -1,0 +1,20 @@
+<link rel="import" href="led-buttons.html">
+
+<dom-module id="app-shell">
+	<template>
+		<h1>LED Demo</h1>
+
+		<led-buttons></led-buttons>
+	</template>
+	<script>
+		Polymer({
+			is: 'app-shell',
+			properties: {
+				greeting: {
+					type: String,
+					value: 'Hello!'
+				}
+			}
+		});
+	</script>
+</dom-module>

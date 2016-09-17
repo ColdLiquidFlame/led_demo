@@ -1,0 +1,71 @@
+<link rel="import" href="../components/paper-button/paper-button.html">
+<link rel="import" href="../components/paper-toast/paper-toast.html">
+<link rel="import" href="../components/paper-styles/color.html">
+<link rel="import" href="../components/iron-ajax/iron-ajax.html">
+
+<dom-module id="led-buttons">
+	<template>
+		<iron-ajax 
+			id="ledAjax"
+			url="/api/{{color}}"
+			handel-as: 'json'
+			last-response='{{ response }}'
+			on-response='handleResponse'></iron-ajax>
+
+		<paper-toast 
+			id="toast"
+			class$='{{ color }}'></paper-toast>
+
+		<paper-button 
+			on-click="redClicked" 
+			class="red" 
+			raised>Red</paper-button>
+
+		<paper-button
+			on-click="greenClicked" 
+			class="green" 
+			raised>Green</paper-button>
+
+		<style is="custom-style">
+			paper-button.red {
+				background: var(--paper-red-500);
+			}
+
+			paper-button.green {
+				background: var(--paper-green-500);
+			}
+			paper-toast.red {
+				--paper-toast-background-color: red; 
+			}
+			paper-toast.green {
+				--paper-toast-background-color: var(--paper-green-500); 
+			}
+		</style>
+	</template>
+	<script>
+		Polymer({
+			is: "led-buttons",
+			properties: {
+				color: {
+					type: String,
+					value: '',
+					notify: true
+				}
+			},			
+			redClicked: function(e) {
+				this.color = 'red';
+				var result = this.$.ledAjax.generateRequest();
+			},
+			greenClicked: function(e) {
+				this.color = 'green';
+				this.$.ledAjax.generateRequest();
+			},
+			handleResponse: function() {
+				if(this.$.toast.opened) {
+					this.$.toast.close();
+				}
+				this.$.toast.show({ text: this.response.message , duration: 2000 });
+			}
+		})
+	</script>
+</dom-module>
