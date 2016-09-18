@@ -1,0 +1,32 @@
+<<script src="../components/socket.io-client/socket.io.js"></script>
+
+<dom-module id="socket-io">
+	<template>
+		
+	</template>
+	<script>
+		Polymer({
+			is: "socket-io",
+			properties: {
+				io: {
+					type: Object,
+					value: function() { return {}; }
+				},
+				lastResponse: {
+					type: Object,
+					notify: true
+				}
+			},
+			ready: function() {
+				var self = this;
+
+				self.io = io.connect();
+
+				self.io.on('button', function(msg) {
+					self.lastResponse = msg;
+					self.fire('message');
+				});
+			}
+		});
+	</script>
+</dom-module>

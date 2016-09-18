@@ -1,17 +1,24 @@
 var express = require('express'),
-    gpio = require('../gpio');
+    gpio = require('../gpio'),
+    app = require('../server');
 
 var router = express.Router();
 
-router.get('/green', function(req, res) {
-	gpio.turnOnGreen();	
-	res.json({ message: 'Green is turned on.'});
-});
 
-router.get('/red', function(req, res) {
-	gpio.turnOnRed();
-	res.json({ message: 'Red is turned on.'});
-});
 
-module.exports = router;
+module.exports = function(io) {
+	router.get('/green', function(req, res) {
+		var finalState = gpio.toggleGreen();
+		app.io.emit('button', 'Green is turned  ' + finalState + '.');
+		res.json({});
+	});
+
+	router.get('/red', function(req, res) {
+		var finalState = gpio.toggleRed();
+		app.io.emit('button', 'Red is turned  ' + finalState + '.');
+		res.json({});
+	});
+
+	return router;
+};
 

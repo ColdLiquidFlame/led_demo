@@ -12,17 +12,19 @@
 			last-response='{{ response }}'
 			on-response='handleResponse'></iron-ajax>
 
+		<socket-io last-response='{{ socketMessage }}' on-message='handleSocketMessage'></socket-io>
+
 		<paper-toast 
 			id="toast"
 			class$='{{ color }}'></paper-toast>
 
 		<paper-button 
-			on-click="redClicked" 
+			on-tap="redClicked" 
 			class="red" 
 			raised>Red</paper-button>
 
 		<paper-button
-			on-click="greenClicked" 
+			on-tap="greenClicked" 
 			class="green" 
 			raised>Green</paper-button>
 
@@ -61,10 +63,16 @@
 				this.$.ledAjax.generateRequest();
 			},
 			handleResponse: function() {
+				//this.showToastMessage(this.response.message);
+			},
+			handleSocketMessage: function(msg) {
+				this.showToastMessage(this.socketMessage);
+			},
+			showToastMessage: function(message) {
 				if(this.$.toast.opened) {
 					this.$.toast.close();
 				}
-				this.$.toast.show({ text: this.response.message , duration: 2000 });
+				this.$.toast.show({ text: message , duration: 2000 });
 			}
 		})
 	</script>

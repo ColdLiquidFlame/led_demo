@@ -1,20 +1,27 @@
+
+<link rel="import" href="../components/paper-material/paper-material.html">
 <link rel="import" href="led-buttons.html">
+<link rel="import" href="socket-io.html">
 
 <dom-module id="app-shell">
 	<template>
-		<h1>LED Demo</h1>
 
-		<led-buttons></led-buttons>
+		
+		<paper-material>
+			<h1>LED Demo</h1>
+
+			<led-buttons></led-buttons>
+		</paper-material>
+
+		<style is="custom-style">
+			paper-material: {
+				padding: 1em;
+			}
+		</style>
 	</template>
 	<script>
 		Polymer({
-			is: 'app-shell',
-			properties: {
-				greeting: {
-					type: String,
-					value: 'Hello!'
-				}
-			}
+			is: 'app-shell'			
 		});
 	</script>
 </dom-module>
