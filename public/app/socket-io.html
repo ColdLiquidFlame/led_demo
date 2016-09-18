@@ -12,6 +12,7 @@
 					type: Object,
 					value: function() { return {}; }
 				},
+				socket: String,
 				lastResponse: {
 					type: Object,
 					notify: true
@@ -22,7 +23,7 @@
 
 				self.io = io.connect();
 
-				self.io.on('button', function(msg) {
+				self.io.on(self.socket, function(msg) {
 					self.lastResponse = msg;
 					self.fire('message');
 				});

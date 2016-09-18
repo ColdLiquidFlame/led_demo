@@ -12,7 +12,10 @@
 			last-response='{{ response }}'
 			on-response='handleResponse'></iron-ajax>
 
-		<socket-io last-response='{{ socketMessage }}' on-message='handleSocketMessage'></socket-io>
+		<socket-io 
+			socket='button' 
+			last-response='{{ socketMessage }}' 
+			on-message='handleSocketMessage'></socket-io>
 
 		<paper-toast 
 			id="toast"
