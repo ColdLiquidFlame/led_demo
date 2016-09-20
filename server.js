@@ -12,7 +12,7 @@ var server = app.listen(3000, function() {
 var io = require('socket.io').listen(server);
 
 var usersConnected = 0;
-io.on('connection', function(socket){
+io.on('connection', function(socket) {
 	usersConnected += 1;
 	io.emit('users', usersConnected);
 	console.log( usersConnected + ' users connected');

@@ -1,41 +1,36 @@
 var wpi = require('wiring-pi'),
-    app = require('./server'),
-    green = 4,
-    red = 26,
-    button = 13;
+    //app = require('./server'),
+    green = [19, 6],
+    red = [26, 13, 5],
+    button = 18;
 
 // Initialize and setup pins
 wpi.wiringPiSetupGpio();
-wpi.pinMode(green, wpi.OUTPUT);
-wpi.pinMode(red, wpi.OUTPUT);
+// Setup Green LEDs
+function initializeOutputPin(pin) {
+	wpi.pinMode(pin, wpi.OUTPUT);
+	//console.log('Initializing pin:' + pin);
+}
+green.forEach(initializeOutputPin);
+red.forEach(initializeOutputPin);
 
 wpi.pinMode(button, wpi.INPUT);
 wpi.pullUpDnControl(button, wpi.PUD_UP);
 wpi.wiringPiISR(button, wpi.INT_EDGE_FALLING, function(delta) {
 	console.log('Button was pressed. (' + delta + ')');
-	app.io.emit('button', 'button was clicked');
+	//app.io.emit('button', 'button was clicked');
 });
 
 
 var gpio = {};
 
 gpio.turnAllOff = function() {
-	wpi.digitalWrite(red, wpi.LOW);
-	wpi.digitalWrite(green, wpi.LOW);
-};
-
-gpio.turnOnGreen = function() {
-	gpio.turnAllOff();
-
-	console.log('Green: ' + green + ' | Value: ' + wpi.HIGH);
-	wpi.digitalWrite(green, wpi.HIGH);
-};
-
-gpio.turnOnRed = function() {
-	gpio.turnAllOff();
-
-	console.log('Red: ' + red + ' | Value: ' + wpi.HIGH);
-	wpi.digitalWrite(red, wpi.HIGH);
+	red.forEach(function(pin) {
+		wpi.digitalWrite(pin, wpi.LOW);
+	});
+	green.forEach(function(pin) {
+		wpi.digitalWrite(pin, wpi.LOW);
+	});
 };
 
 gpio.getPiVersion = function() {
@@ -47,20 +42,38 @@ gpio.toggleLed = function(led) {
 	var currentLedState = wpi.digitalRead(led);
 	if(currentLedState === wpi.LOW) {
 		wpi.digitalWrite(led, wpi.HIGH);
-		return 'on';
 	}
 	else {
-		wpi.digitalWrite(led, wpi.LOW);
-		return 'off';
+		wpi.digitalWrite(led, wpi.LOW);	
 	}
 };
 
+gpio.switchLed = function(pin, value) {
+	wpi.digitalWrite(pin, value);
+}
+
 gpio.toggleGreen = function() {
- 	return gpio.toggleLed(green);
+ 	green.forEach(function(pin) { gpio.toggleLed(pin); });
+ 	
+
+ 	return gpio.getCurrentState(green);
 };
 
 gpio.toggleRed = function() {
- 	return gpio.toggleLed(red);
+ 	red.forEach(function(pin) { gpio.toggleLed(pin); });
+ 	
+
+ 	return gpio.getCurrentState(red);
+};
+
+gpio.getCurrentState = function(pins) {
+	var currentLedState = wpi.digitalRead(pins[0]);
+	if(currentLedState === wpi.LOW) {
+		return 'on';
+	}
+	else {
+		return 'off';
+	}
 };
 
 
