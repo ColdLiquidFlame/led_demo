@@ -1,5 +1,5 @@
 var wpi = require('wiring-pi'),
-    //app = require('./server'),
+    app = require('./server'),
     green = [19, 6],
     red = [26, 13, 5],
     button = 18;
@@ -18,7 +18,7 @@ wpi.pinMode(button, wpi.INPUT);
 wpi.pullUpDnControl(button, wpi.PUD_UP);
 wpi.wiringPiISR(button, wpi.INT_EDGE_FALLING, function(delta) {
 	console.log('Button was pressed. (' + delta + ')');
-	//app.io.emit('button', 'button was clicked');
+	app.io.emit('button', 'button was clicked');
 });
 
 
@@ -69,10 +69,10 @@ gpio.toggleRed = function() {
 gpio.getCurrentState = function(pins) {
 	var currentLedState = wpi.digitalRead(pins[0]);
 	if(currentLedState === wpi.LOW) {
-		return 'on';
+		return 'off';
 	}
 	else {
-		return 'off';
+		return 'on';
 	}
 };
 
