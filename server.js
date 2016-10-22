@@ -11,17 +11,35 @@ var server = app.listen(3000, function() {
 
 var io = require('socket.io').listen(server);
 
+console.log('instatiated');
+
 var usersConnected = 0;
-io.on('connection', function(socket) {
+// io.on('connection', function(socket) {
+// 	//usersConnected += 1;
+// 	//io.emit('users', usersConnected);
+// 	//console.log( usersConnected + ' users connected');
+
+
+
+// 	socket.on('disconnect', function() {
+// 		usersConnected -= 1;
+// 		io.emit('users', usersConnected);
+// 		console.log( usersConnected + ' users connected');
+// 	});
+// });
+
+io.sockets.in('/users').on('connection', function(socket) {
 	usersConnected += 1;
-	io.emit('users', usersConnected);
-	console.log( usersConnected + ' users connected');
+	io.emit('users', usersConnected / 2);
+	console.log( usersConnected + ' users connected');	
 
 	socket.on('disconnect', function() {
 		usersConnected -= 1;
-		io.emit('users', usersConnected);
-		console.log( usersConnected + ' users connected');
+		io.emit('users', usersConnected / 2);
+		console.log( usersConnected + ' users connected');	
 	});
 });
+
+
 
 exports.io = io;
